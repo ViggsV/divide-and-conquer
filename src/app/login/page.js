@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { ApiClient } from '../../../api/client';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { useState } from "react";
+import { ApiClient } from "../../../api/client";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function UserLoginPage() {
-  const [form, setForm] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    setError('');
+    setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.email || !form.password) {
-      setError('Please enter both email and password.');
+      setError("Please enter both email and password.");
       return;
     }
     setLoading(true);
@@ -27,14 +27,16 @@ export default function UserLoginPage() {
       const apiClient = new ApiClient();
       const response = await apiClient.login(form.email, form.password);
 
-      if (response.data && response.data.token) {
-        router.push('/events');
+      if (response && response.accessToken) {
+        router.push("/chores");
       } else {
-        setError('Login successful but no token received');
+        setError("Login successful but no token received");
       }
     } catch (err) {
-      console.error('Login error:', err.response || err);
-      setError(err.response?.data?.message || 'Invalid credentials or server error.');
+      console.error("Login error:", err.response || err);
+      setError(
+        err.response?.data?.message || "Invalid credentials or server error."
+      );
     } finally {
       setLoading(false);
     }
@@ -50,11 +52,16 @@ export default function UserLoginPage() {
 
       <main className="flex-grow flex items-center justify-center px-4">
         <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-          <h2 className="text-2xl font-bold mb-6 text-center">Log in to your account</h2>
+          <h2 className="text-2xl font-bold mb-6 text-center">
+            Log in to your account
+          </h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Email address
               </label>
               <input
@@ -70,7 +77,10 @@ export default function UserLoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Password
               </label>
               <input
@@ -107,14 +117,18 @@ export default function UserLoginPage() {
               disabled={loading}
               className="w-full bg-fuchsia-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-fuchsia-700 transition-colors focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:ring-offset-2 disabled:opacity-60"
             >
-              {loading ? 'Logging in...' : 'Login'}
+              {loading ? "Logging in..." : "Login"}
             </button>
           </form>
 
           <div className="flex items-center justify-between mt-6">
-            <p className="text-fuchsia-600/70 font-light text-sm">Don't have an account?</p>
+            <p className="text-fuchsia-600/70 font-light text-sm">
+              Don't have an account?
+            </p>
             <Link href="/register">
-              <button className="text-blue-500 hover:underline">Register</button>
+              <button className="text-blue-500 hover:underline">
+                Register
+              </button>
             </Link>
           </div>
         </div>
