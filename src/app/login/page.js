@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ApiClient } from '../apiClient/apiClient';
+import { ApiClient } from '../../../api/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -114,7 +114,7 @@ export default function UserLoginPage() {
           <div className="flex items-center justify-between mt-6">
             <p className="text-fuchsia-600/70 font-light text-sm">Don't have an account?</p>
             <Link href="/register">
-              <a className="text-blue-500 hover:underline">Register</a>
+              <button className="text-blue-500 hover:underline">Register</button>
             </Link>
           </div>
         </div>
