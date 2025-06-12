@@ -31,9 +31,9 @@ export default function Home() {
               <Link href="/login" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded shadow">
                 Schedule a Chore
               </Link>
-              <button className="bg-white text-gray-900 border border-gray-300 hover:bg-gray-50 font-semibold py-2 px-6 rounded shadow">
+              <Link href="/chores" className="bg-white text-gray-900 border border-gray-300 hover:bg-gray-50 font-semibold py-2 px-6 rounded shadow"> 
                 View Upcoming Tasks
-              </button>
+              </Link>
             </div>
           </section>
 

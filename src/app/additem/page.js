@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { ApiClient } from "../../../api/client";
 
 export default function AddItemPage() {
+  const client = new ApiClient()
   const router = useRouter();
 
   const [itemType, setItemType] = useState("chores"); 
@@ -57,7 +59,9 @@ export default function AddItemPage() {
 
     if (itemType === "chores") {
       newItem.difficulty = difficulty;
-      newItem.assignedUser = assignedUser; // eventually implement user assignment
+      newItem.assignedUser = assignedUser;
+       // eventually implement user assignment
+       const data = client.addChore(newItem)
     } else {
       newItem.price = Number(price);
       newItem.pricePerPerson = Number(pricePerPerson);
