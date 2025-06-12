@@ -9,7 +9,7 @@ export class ApiClient {
         })
 
         this.axiosInstance.interceptors.request.use((config) => {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('authToken');
             if (token) {
                 config.headers.Authorization = `Bearer ${token}`;
             }
@@ -107,5 +107,11 @@ async login(email, password) {
     if (typeof window !== "undefined") {
       window.location.href = "/user";
     }
+  }
+
+  async addChore(newItem) {
+    console.log(newItem)
+    const data = await this.axiosInstance.post("api/chores", newItem)
+    console.log(data)
   }
 }
