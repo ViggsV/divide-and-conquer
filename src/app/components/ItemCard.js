@@ -22,7 +22,7 @@ export default function ItemCard({
     >
       {/* Title */}
       <div className="flex justify-between items-center mb-2">
-        <h3 className="text-lg font-semibold">{title}</h3>
+        <h3 className="text-lg font-semibold  text-gray-300">{title}</h3>
         <button
           // For now, just a placeholder for toggling completed
           onClick={() => alert("Toggle completed - to be implemented")}
@@ -36,7 +36,7 @@ export default function ItemCard({
 
       {/* Due date */}
       {dueDate && (
-        <p className="text-sm mb-1">
+        <p className="text-sm mb-1 text-blue-200">
           <strong>Due Date:</strong> {new Date(dueDate).toLocaleDateString()}
         </p>
       )}
@@ -52,13 +52,13 @@ export default function ItemCard({
         <>
           {/* Difficulty */}
           {difficulty !== null && difficulty !== undefined && (
-            <p className="text-sm mb-2">
+            <p className="text-sm mb-2 text-blue-200">
               <strong>Difficulty:</strong> {difficulty}/10
             </p>
           )}
 
           {/* Assigned User */}
-          <div className="text-sm">
+          <div className="text-sm  text-blue-200" >
             <strong>User:</strong>{" "}
             {assignedUser ? (
               <span>{assignedUser}</span>
