@@ -1,7 +1,7 @@
 export default function ViewToggle({ viewMode, setViewMode }) {
   const baseStyle = "px-4 py-2 w-32 text-center rounded transition text-white";
-  const active = "bg-blue-600";
-  const inactive = "bg-gray-700 hover:bg-gray-600";
+  const active = "bg-emerald-600";
+  const inactive = "bg-rose-700 hover:bg-emerald-600";
 
   return (
     <div className="flex gap-2">
