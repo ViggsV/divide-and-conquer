@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { StarRating } from "./StarRating";
 
 export default function ItemCard({
   id,
@@ -14,79 +15,89 @@ export default function ItemCard({
   price,
   pricePerPerson,
 }) {
+  const themeColor = completed ? "emerald" : "rose";
+
   return (
-  <div
-    className={`p-4 rounded-md shadow-md border ${
-      completed
-        ? "border-emerald-400 bg-emerald-50"
-        : "border-rose-300 bg-rose-50"
-    }`}
-  >
-    {/* Title */}
-    <div className="flex justify-between items-center mb-2">
-      <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
-      <button
-        onClick={() => alert("Toggle completed - to be implemented")}
-        className={`text-sm px-2 py-1 rounded font-medium ${
-          completed
-            ? "bg-emerald-500 text-white hover:bg-emerald-600"
-            : "bg-rose-500 text-white hover:bg-rose-600"
-        }`}
+    <div
+      className={`p-6 rounded-lg shadow-md border border-${themeColor}-400 bg-${themeColor}-50 min-h-[240px] flex flex-col`}
+    >
+      {/* Status Badges */}
+      <div
+        className={`flex justify-between items-center mb-4 border-b border-${themeColor}-400 pb-2`}
       >
-        {completed ? "Completed" : "Not Completed"}
-      </button>
-    </div>
-
-    {/* Due date */}
-    {dueDate && (
-      <p className="text-sm mb-1 text-emerald-700">
-        <strong>Due Date:</strong> {new Date(dueDate).toLocaleDateString()}
-      </p>
-    )}
-
-    {/* Description */}
-    {description && (
-      <p className="text-sm mb-2 text-emerald-700">
-        <strong>Description:</strong> {description}
-      </p>
-    )}
-
-    {/* Chore-specific fields */}
-    {type === "chores" && (
-      <>
-        {difficulty !== null && difficulty !== undefined && (
-          <p className="text-sm mb-2 text-emerald-700">
-            <strong>Difficulty:</strong> {difficulty}/10
-          </p>
+        {/* Assigned User Badge */}
+        {assignedUser ? (
+          <span className="text-base font-medium text-gray-700">
+            <strong>User:</strong> {assignedUser}
+          </span>
+        ) : (
+          <button
+            onClick={() => alert("Assign user - to be implemented")}
+            className={`text-sm px-2 py-1 rounded font-medium bg-${themeColor}-500 text-white hover:bg-${themeColor}-600 transition`}
+          >
+            User Unassigned
+          </button>
         )}
 
-        <div className="text-sm text-emerald-700">
-          <strong>User:</strong>{" "}
-          {assignedUser ? (
-            <span>{assignedUser}</span>
+        {/* Completed Status Badge */}
+        <button
+          onClick={() => alert("Toggle completed - to be implemented")}
+          className={`text-sm px-2 py-1 rounded font-medium bg-${themeColor}-500 text-white hover:bg-${themeColor}-600 transition`}
+        >
+          {completed ? "Completed" : "Not Completed"}
+        </button>
+      </div>
+
+      {/* Title */}
+      <h3 className="text-2xl font-bold text-center text-gray-800 mb-4">
+        {title}
+      </h3>
+
+      {/* Description */}
+      <div className="flex-grow mb-4">
+        {description && (
+          <div>
+            <p className="text-base text-gray-700 font-semibold mb-1">
+            
+            </p>
+            <p className="text-base text-gray-700">{description}</p>
+          </div>
+        )}
+
+        {/* Bills-specific Fields */}
+        {type === "bills" && (
+          <div className="mt-3 text-base text-gray-700">
+            <p>
+              <strong>Price:</strong> £{price.toFixed(2)}
+            </p>
+            <p>
+              <strong>Price per person:</strong> £{pricePerPerson.toFixed(2)}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Difficulty + Due Date */}
+      {(difficulty !== null || dueDate) && (
+        <div
+          className={`flex justify-between items-center text-base text-gray-700 pt-3 border-t border-${themeColor}-400 mt-auto`}
+        >
+          {difficulty !== null && difficulty !== undefined ? (
+            <div className="flex items-center gap-2">
+              <strong>Difficulty:</strong>
+              <StarRating rating={difficulty} interactive={false} size={25} />
+            </div>
           ) : (
-            <button
-              onClick={() => alert("Assign user - to be implemented")}
-              className="text-rose-600 underline hover:text-rose-800"
-            >
-              Not assigned (click to assign)
-            </button>
+            <span />
+          )}
+          {dueDate && (
+            <span>
+              <strong>Due Date:</strong>{" "}
+              {new Date(dueDate).toLocaleDateString()}
+            </span>
           )}
         </div>
-      </>
-    )}
-
-    {/* Bill-specific fields */}
-    {type === "bills" && (
-      <>
-        <p className="text-sm mb-1 text-emerald-700">
-          <strong>Price:</strong> £{price.toFixed(2)}
-        </p>
-        <p className="text-sm text-emerald-700">
-          <strong>Price per person:</strong> £{pricePerPerson.toFixed(2)}
-        </p>
-      </>
-    )}
-  </div>
-);
+      )}
+    </div>
+  );
 }
