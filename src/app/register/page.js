@@ -43,12 +43,12 @@ export default function UserRegisterPage() {
   };
 
   return (
-    <div className="bg-gray-100 text-gray-900 min-h-screen flex flex-col">
-      <header className="bg-blue-600 text-white p-6 shadow-md">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-extrabold">All Your Chores</h1>
-        </div>
-      </header>
+    <div className="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+  <header className="bg-rose-500 text-white p-6 shadow-md">
+    <div className="max-w-5xl mx-auto">
+      <Link href="/" className="text-3xl font-extrabold tracking-tight">All Your Chores</Link>
+    </div>
+  </header>
 
       <main className="flex-grow flex items-center justify-center px-4">
         <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
@@ -102,18 +102,18 @@ export default function UserRegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-fuchsia-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-fuchsia-700 transition-colors focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:ring-offset-2 disabled:opacity-60"
+              className="w-full bg-rose-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-emerald-700 transition-colors focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:ring-offset-2 disabled:opacity-60"
             >
               {loading ? "Registering..." : "Register"}
             </button>
           </form>
 
           <div className="flex items-center justify-between mt-6">
-            <p className="text-fuchsia-600/70 font-light text-sm">
+            <p className="text-sm text-gray-600">
               Already have an account?
             </p>
             <Link href="/login">
-              <button className="text-blue-500 hover:underline">
+              <button className="text-rose-500 hover:underline font-medium">
                 Log in
               </button>
             </Link>
@@ -127,3 +127,5 @@ export default function UserRegisterPage() {
     </div>
   );
 }
+
+          

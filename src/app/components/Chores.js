@@ -43,7 +43,7 @@ export default function MainPage({items}) {
   return (
     <div className="max-w-5xl mx-auto p-4">
       {/* Top Panel */}
-      <div className="border-2 border-gray-800 rounded-md p-4 mb-6 bg-gray-900 shadow-sm">
+      <div className="border-2 border-rose-800 rounded-md p-4 mb-6 bg-emerald-900 shadow-sm">
         {/* Dropdown + New Page Button */}
         <div className="flex items-center mb-4">
           <ChorePageSelector
@@ -53,7 +53,7 @@ export default function MainPage({items}) {
           />
           <button
             onClick={handleNewPage}
-            className="ml-3 px-4 py-1 bg-gray-700 text-white rounded-md hover:bg-gray-500 transition"
+            className="ml-3 px-4 py-1 bg-rose-700 text-white rounded-md hover:bg-emerald-500 transition"
           >
             New Page
           </button>
@@ -73,7 +73,7 @@ export default function MainPage({items}) {
 
       {/* Items */}
       {filteredItems.length === 0 ? (
-        <p className="text-center text-gray-400">No items found.</p>
+        <p className="text-center text-emerald-400">No items found.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredItems.map((item) => (

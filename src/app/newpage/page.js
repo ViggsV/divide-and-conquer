@@ -1,51 +1,61 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-export default function NewPage() {
-  const [pageName, setPageName] = useState("");
+export default function CreateChorePage() {
   const router = useRouter();
+  const [pageName, setPageName] = useState('');
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (!pageName.trim()) return alert("Please enter a page name");
-
-    // We can store the new page in a global store, API, or another way.
-    // For now, we will just alert the user and redirect them back to the chores main page
-
-    alert(`New page "${pageName}" created!`);
-    // Redirecting back to chores main page after creating
-    router.push("/chores");
-  }
+    // Handle creating the page/chore
+    console.log('Creating page:', pageName);
+    router.push('/chores');
+  };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-gray-900 text-white rounded-md shadow-md">
-      <h1 className="text-2xl mb-4">Create New Chore Page</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-        <input
-          type="text"
-          value={pageName}
-          onChange={(e) => setPageName(e.target.value)}
-          placeholder="Page name"
-          className="p-2 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-blue-500"
-        />
-        <div className="flex justify-between">
-          <button
-            type="button"
-            onClick={() => router.push("/chores")}
-            className="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
-          >
-            Create
-          </button>
-        </div>
-      </form>
+    <div className="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+  {/* Header */}
+  <header className="bg-rose-500 text-white p-6 shadow-md">
+    <div className="max-w-4xl mx-auto">
+      <Link href="/" className="text-3xl font-extrabold tracking-tight">
+        All Your Chores
+      </Link>
     </div>
+  </header>
+
+  {/* Form Card */}
+  <div className="max-w-md mx-auto mt-12 p-6 bg-white text-gray-800 rounded-lg shadow-lg">
+    <h1 className="text-2xl font-bold mb-4">Create New Chore Page</h1>
+
+    <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+      <input
+        type="text"
+        value={pageName}
+        onChange={(e) => setPageName(e.target.value)}
+        placeholder="Page name"
+        className="p-3 rounded bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400"
+      />
+
+      <div className="flex justify-between gap-4">
+        <button
+          type="button"
+          onClick={() => router.push("/chores")}
+          className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          className="w-full px-4 py-2 bg-rose-500 text-white rounded hover:bg-rose-600 transition"
+        >
+          Create
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
   );
 }
