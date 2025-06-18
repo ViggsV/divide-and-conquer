@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ApiClient } from "../../../api/client";
 import Link from "next/link";
+import { StarRating } from "../components/StarRating";
 
 export default function AddItemPage() {
   const client = new ApiClient()
@@ -162,22 +163,13 @@ export default function AddItemPage() {
     {/* Chore-specific fields */}
     {itemType === "chores" && (
       <>
-        <div>
-  <label htmlFor="difficulty" className="block mb-1 font-medium">
-    Difficulty (out of 10)
+       {/* Star Picker */}
+<div>
+  <label className="block mb-1 font-medium">
+    Difficulty
   </label>
-  <select
-    id="difficulty"
-    value={difficulty}
-    onChange={(e) => setDifficulty(Number(e.target.value))}
-    className="w-full p-2 rounded bg-white border border-gray-300 focus:outline-none focus:border-emerald-400"
-  >
-    {[...Array(10)].map((_, i) => (
-      <option key={i + 1} value={i + 1}>
-        {i + 1}
-      </option>
-    ))}
-  </select>
+  <StarRating rating={difficulty} onChange={setDifficulty} interactive={true} size={50} />
+  <p className="text-sm text-gray-500 mt-1">Click stars to rate difficulty</p>
 </div>
 
         <div>

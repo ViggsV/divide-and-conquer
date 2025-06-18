@@ -75,12 +75,12 @@ export default function MainPage({items}) {
       {filteredItems.length === 0 ? (
         <p className="text-center text-emerald-400">No items found.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {filteredItems.map((item) => (
             <ItemCard
               key={item._id}
               {...item}
-             
+             onToggleCompleted={() => toggleCompleted(item._id)}
             />
           ))}
         </div>
