@@ -90,10 +90,11 @@ async login(email, password) {
 }
 
 
-  async register(email, password) {
+  async register(email, password, name) {
     const { data } = await this.axiosInstance.post("api/auth/register", {
       email,
       password,
+      name
     });
     if (data.accessToken) {
       this.setToken(data.accessToken);

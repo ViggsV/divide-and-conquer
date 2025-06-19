@@ -4,7 +4,9 @@ import axios from "axios"
 import Link from "next/link";
 
 const page = async () => {
-  let data = await axios.get("http://localhost:3001/api/chores")
+  let data = await axios.get("http://localhost:3001/api/chores", {
+    withCredentials: true,
+  })
   data.data.forEach(element => {
     element.pageId = 1
     element.type = "chores"
