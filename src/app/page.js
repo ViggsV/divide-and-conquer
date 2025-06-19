@@ -58,13 +58,13 @@ export default function Home() {
 
       {/* Call to Action */}
       <section className="bg-emerald-500 rounded-xl p-10 text-center text-white space-y-4">
-        <h3 className="text-2xl font-bold">Ready to Get Organized?</h3>
+        <h3 className="text-2xl font-bold">Ready to Get Organised?</h3>
         <p className="max-w-xl mx-auto text-emerald-100">
           Join other households managing their tasks with ease using All Your Chores.
         </p>
         <Link
           href="/register"
-          className="bg-white text-emerald-600 hover:bg-gray-100 font-medium py-2 px-6 rounded-md shadow-md transition"
+          className="bg-white text-emerald-600 hover:bg-rose-400 font-medium py-2 px-6 rounded-md shadow-md transition"
         >
           Get Started For Free
         </Link>
