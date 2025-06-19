@@ -9,7 +9,7 @@ export default function ChorePageSelector({ selectedPage, setSelectedPage }) {
     <select
       value={selectedPage}
       onChange={(e) => setSelectedPage(e.target.value)}
-      className="bg-emerald-400 border border-rose-700 rounded p-4 w-full"
+      className="bg-emerald-400 border-2 border-emerald-400 rounded p-4 w-full"
     >
       {options.map((option) => (
         <option key={option} value={option}>{option}</option>

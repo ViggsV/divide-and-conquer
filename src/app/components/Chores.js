@@ -8,42 +8,47 @@ import StatusFilter from "../components/StatusFilter";
 import ItemCard from "../components/ItemCard";
 import AddItemButton from "../components/AddItemButton";
 
-export default function MainPage({items}) {
-    console.log(items)
+export default function MainPage({ items }) {
   const [chorePages, setChorePages] = useState([
     { id: 1, name: "Home" },
     { id: 2, name: "Work" },
   ]);
   const [selectedPage, setSelectedPage] = useState(chorePages[0]?.id || null);
-
-  const [viewMode, setViewMode] = useState("chores"); // chores or bills
-  const [filter, setFilter] = useState("all"); // all, completed, notCompleted
+  const [viewMode, setViewMode] = useState("chores");
+  const [filter, setFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("recent");
 
   const router = useRouter();
 
-  // Redirect to /additem for adding items
   function handleAddItem() {
     router.push("/additem");
   }
 
-  // Navigate to /newpage to create a new page
   function handleNewPage() {
     router.push("/newpage");
   }
 
-  // Filtering items
   const filteredItems = items.filter(
     (item) =>
       item.pageId === selectedPage &&
-      item.type === viewMode
+      item.type === viewMode &&
+      (filter === "all" ||
+        (filter === "completed" && item.completed) ||
+        (filter === "notCompleted" && !item.completed))
   );
 
-  console.log(filteredItems)
+  const sortedItems = [...filteredItems].sort((a, b) => {
+    if (sortBy === "dueDate") {
+      return new Date(a.dueDate || Infinity) - new Date(b.dueDate || Infinity);
+    } else {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    }
+  });
 
   return (
     <div className="max-w-5xl mx-auto p-4">
       {/* Top Panel */}
-      <div className="border-2 border-rose-800 rounded-md p-4 mb-6 bg-emerald-900 shadow-sm">
+      <div className="border-2 border-rose-800 rounded-md p-4 mb-3 bg-emerald-900 shadow-sm">
         {/* Dropdown + New Page Button */}
         <div className="flex items-center mb-4">
           <ChorePageSelector
@@ -67,20 +72,36 @@ export default function MainPage({items}) {
       </div>
 
       {/* Add Item Button */}
-      <div className="flex justify-center mb-6">
-        <AddItemButton onClick={handleAddItem} />
+      <div className="relative mb-6">
+        <div className="absolute left-1/2 -translate-x-1/2">
+          <AddItemButton onClick={handleAddItem} />
+        </div>
+        {/* Sort By Dropdown */}
+        <div className="flex justify-end">
+          <div className="border border-gray-500 rounded bg-emerald-900 px-4 py-2 text-white shadow-sm">
+            <label className="mr-2 font-medium">Sort by:</label>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="bg-emerald-800 border border-gray-600 text-white px-2 py-1 rounded"
+            >
+              <option value="recent">Most Recent</option>
+              <option value="dueDate">Due Date</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       {/* Items */}
-      {filteredItems.length === 0 ? (
+      {sortedItems.length === 0 ? (
         <p className="text-center text-emerald-400">No items found.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {filteredItems.map((item) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+          {sortedItems.map((item) => (
             <ItemCard
               key={item._id}
               {...item}
-             onToggleCompleted={() => toggleCompleted(item._id)}
+              onToggleCompleted={() => toggleCompleted(item._id)}
             />
           ))}
         </div>
