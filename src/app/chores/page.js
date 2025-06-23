@@ -45,13 +45,7 @@ export default function Page() {
         </div>
       </header>
 
-<<<<<<< HEAD
-      <Chores items={items} />
-      
-      
-=======
       <MainPage items={items} selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
->>>>>>> 3218233e2d42df2f643812d65a5b9a2ec8229723
     </div>
   );
 }
