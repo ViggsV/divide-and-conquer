@@ -113,11 +113,35 @@ async login(email, password) {
  async addChore(newItem) {
   try {
     const res = await this.axiosInstance.post("/api/chores", newItem);
-    return res.data; // Return the saved chore
+    return res.data; 
   } catch (err) {
     console.error("Add chore failed:", err.response?.data || err);
     throw err;
   }
 }
+
+async getPages() {
+  try {
+    const res = await this.axiosInstance.get("/api/pages");
+    return res.data.pages;
+  } catch (err) {
+    console.error("Failed to fetch pages:", err.response?.data || err);
+    throw err;
+  }
+}
+
+async addUsersToPage(pageId, invitedEmails) {
+  try {
+    const res = await this.axiosInstance.post('/api/pages/add-users', {
+      pageId,
+      invitedEmails,
+    });
+    return res.data;
+  } catch (err) {
+    console.error("Failed to add users to page:", err.response?.data || err);
+    throw err;
+  }
+}
+
 
 }
