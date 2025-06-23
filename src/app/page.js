@@ -17,10 +17,7 @@ export default function Home() {
 
   return (
     <div className="bg-gray-50 text-gray-800 min-h-screen flex flex-col relative">
-     
-      <div className="absolute top-4 right-4 z-10">
-        <LogoutButton />
-      </div>
+    
 
      
       <header className="bg-rose-500 text-white p-6 shadow-md">
