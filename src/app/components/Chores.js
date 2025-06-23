@@ -1,29 +1,41 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import ChorePageSelector from "../components/ChorePageSelector";
 import ViewToggle from "../components/ViewToggle";
 import StatusFilter from "../components/StatusFilter";
 import ItemCard from "../components/ItemCard";
 import AddItemButton from "../components/AddItemButton";
+import axios from "axios";
 
-export default function MainPage({ items }) {
-  const [chorePages, setChorePages] = useState([
-    { id: 1, name: "Home" },
-    { id: 2, name: "Work" },
-  ]);
-  const [selectedPage, setSelectedPage] = useState(chorePages[0]?.id || null);
+export default function MainPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const pageFromQuery = searchParams.get("page");
+
+  const [items, setItems] = useState([]);
+  const [pages, setPages] = useState([]);
+  const [selectedPage, setSelectedPage] = useState(pageFromQuery || "");
+
   const [viewMode, setViewMode] = useState("chores");
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("recent");
 
-  const router = useRouter();
+  useEffect(() => {
+    async function fetchPages() {
+      const token = localStorage.getItem("authToken");
+      if (!token) return;
 
-  function handleAddItem() {
-    router.push("/additem");
-  }
+      try {
+        const res = await axios.get("http://localhost:3001/api/pages", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setPages(res.data);
 
+<<<<<<< HEAD
   function handleNewPage() {
     router.push("/newpage");
   }
@@ -37,11 +49,45 @@ const handleDelete = async (id) => {
       alert(message);
     }
   };
+=======
+  
+        if (!selectedPage && res.data.length > 0) {
+          setSelectedPage(res.data[0]._id.toString());
+        }
+      } catch (err) {
+        console.error("Failed to fetch pages:", err);
+      }
+    }
+    fetchPages();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedPage) {
+      setItems([]); 
+      return;
+    }
+
+    async function fetchChores() {
+      const token = localStorage.getItem("authToken");
+      if (!token) return;
+
+      try {
+        const res = await axios.get(`http://localhost:3001/api/chores?pageId=${selectedPage}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setItems(res.data);
+      } catch (err) {
+        console.error("Failed to fetch chores:", err);
+        setItems([]);
+      }
+    }
+    fetchChores();
+  }, [selectedPage]);
+>>>>>>> 3218233e2d42df2f643812d65a5b9a2ec8229723
 
   const filteredItems = items.filter(
     (item) =>
-      item.pageId === selectedPage &&
-      item.type === viewMode &&
+      item.pageId?.toString() === selectedPage.toString() &&
       (filter === "all" ||
         (filter === "completed" && item.completed) ||
         (filter === "notCompleted" && !item.completed))
@@ -55,17 +101,21 @@ const handleDelete = async (id) => {
     }
   });
 
+  function handleAddItem() {
+    router.push("/additem");
+  }
+
+  function handleNewPage() {
+    router.push("/newpage");
+  }
+
   return (
     <div className="max-w-5xl mx-auto p-4">
       {/* Top Panel */}
       <div className="border-2 border-rose-800 rounded-md p-4 mb-3 bg-emerald-900 shadow-sm">
         {/* Dropdown + New Page Button */}
         <div className="flex items-center mb-4">
-          <ChorePageSelector
-            chorePages={chorePages}
-            selectedPage={selectedPage}
-            setSelectedPage={setSelectedPage}
-          />
+          <ChorePageSelector selectedPage={selectedPage} setSelectedPage={setSelectedPage} pages={pages} />
           <button
             onClick={handleNewPage}
             className="ml-3 px-4 py-1 bg-rose-700 text-white rounded-md hover:bg-emerald-500 transition"
@@ -112,7 +162,7 @@ const handleDelete = async (id) => {
             <ItemCard
               key={item._id}
               {...item}
-              onToggleCompleted={() => toggleCompleted(item._id)}
+              onToggleCompleted={() => console.log("Toggle completed for", item._id)}
             />
           ))}
           <div>

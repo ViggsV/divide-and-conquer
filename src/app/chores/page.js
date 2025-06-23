@@ -1,52 +1,57 @@
 'use client';
+
 import React, { useEffect, useState } from 'react';
-import Chores from '../components/Chores';
+import MainPage from '../components/Chores';
 import Link from 'next/link';
 import axios from 'axios';
+import { useSearchParams } from 'next/navigation';
 
 export default function Page() {
+  const searchParams = useSearchParams();
+  const pageFromUrl = searchParams.get('page');
+
   const [items, setItems] = useState([]);
+  const [selectedPage, setSelectedPage] = useState(pageFromUrl || '');
 
   useEffect(() => {
+    if (!selectedPage) return;
+
     const fetchChores = async () => {
       const token = localStorage.getItem("authToken");
       if (!token) return;
 
       try {
-        const res = await axios.get("http://localhost:3001/api/chores", {
+        const res = await axios.get(`http://localhost:3001/api/chores?pageId=${selectedPage}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          params: { pageId: selectedPage },
         });
 
-        const chores = res.data.map(item => ({
-          ...item,
-          pageId: 1,
-          type: "chores",
-        }));
-
-        setItems(chores);
+        setItems(res.data);
       } catch (err) {
         console.error("Failed to fetch chores:", err);
       }
     };
 
     fetchChores();
-  }, []);
+  }, [selectedPage]);
 
   return (
     <div>
       <header className="bg-rose-500 text-white p-6 shadow-md">
         <div className="max-w-4xl mx-auto">
-          <Link href="/" className="text-3xl font-extrabold">
-            All Your Chores
-          </Link>
+          <Link href="/" className="text-3xl font-extrabold">All Your Chores</Link>
         </div>
       </header>
 
+<<<<<<< HEAD
       <Chores items={items} />
       
       
+=======
+      <MainPage items={items} selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
+>>>>>>> 3218233e2d42df2f643812d65a5b9a2ec8229723
     </div>
   );
 }
