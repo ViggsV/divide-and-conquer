@@ -3,6 +3,7 @@ import Chores from "../components/Chores"
 import axios from "axios"
 import Link from "next/link";
 
+
 const page = async () => {
   let data = await axios.get("http://localhost:3001/api/chores", {
     withCredentials: true,
@@ -22,6 +23,12 @@ const page = async () => {
   </header>
 
   <Chores items={data.data} />
+  <div><button
+                  
+                  className="text-sm"
+                >
+                  &#128465; Delete
+                </button></div>
 </div>
   )
 }
