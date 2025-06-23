@@ -27,6 +27,16 @@ export default function MainPage({ items }) {
   function handleNewPage() {
     router.push("/newpage");
   }
+const handleDelete = async (id) => {
+    const apiClient = new ApiClient();
+    try {
+      await apiClient.removeChore(id);
+      setChores((prevChores) => prevChores.filter((chore) => chore._id !== id));
+    } catch (err) {
+      const message = err.response?.data?.message || "Failed to delete ad.";
+      alert(message);
+    }
+  };
 
   const filteredItems = items.filter(
     (item) =>
@@ -69,6 +79,7 @@ export default function MainPage({ items }) {
           <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
           <StatusFilter filter={filter} setFilter={setFilter} />
         </div>
+        
       </div>
 
       {/* Add Item Button */}
@@ -104,7 +115,16 @@ export default function MainPage({ items }) {
               onToggleCompleted={() => toggleCompleted(item._id)}
             />
           ))}
+          <div>
+          <button
+                  onClick={() => handleDelete(item._id)}
+                  className="text-sm"
+                >
+                  &#128465; Delete
+                </button>
+              </div>
         </div>
+        
       )}
     </div>
   );

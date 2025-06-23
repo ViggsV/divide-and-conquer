@@ -45,6 +45,8 @@ export default function Page() {
       </header>
 
       <Chores items={items} />
+      
+      
     </div>
   );
 }
