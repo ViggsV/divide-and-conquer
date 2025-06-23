@@ -110,9 +110,14 @@ async login(email, password) {
     }
   }
 
-  async addChore(newItem) {
-    console.log(newItem)
-    const data = await this.axiosInstance.post("api/chores", newItem)
-    console.log(data)
+ async addChore(newItem) {
+  try {
+    const res = await this.axiosInstance.post("/api/chores", newItem);
+    return res.data; // Return the saved chore
+  } catch (err) {
+    console.error("Add chore failed:", err.response?.data || err);
+    throw err;
   }
+}
+
 }
