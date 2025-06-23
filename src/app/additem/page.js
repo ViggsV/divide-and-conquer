@@ -25,55 +25,62 @@ export default function AddItemPage() {
   const [price, setPrice] = useState("");
   const [pricePerPerson, setPricePerPerson] = useState("");
 
-  function handleSubmit(e) {
-    e.preventDefault();
+async function handleSubmit(e) {
+  e.preventDefault();
 
-    // Basic validation for required fields - can expand this later
-    if (!title.trim()) {
-      alert("Title is required.");
-      return;
-    }
-    if (itemType === "bills" && !dueDate) {
-      alert("Due date is required for bills.");
-      return;
-    }
-    if (itemType === "bills") {
-      if (!price || isNaN(price) || Number(price) <= 0) {
-        alert("Valid price is required.");
-        return;
-      }
-      if (!pricePerPerson || isNaN(pricePerPerson) || Number(pricePerPerson) <= 0) {
-        alert("Valid price per person is required.");
-        return;
-      }
-    }
-
-    // The Item Object
-    const newItem = {
-      id: Date.now(),
-      type: itemType,
-      title,
-      dueDate: dueDate || null,
-      description: description.trim() || null,
-      completed: false, 
-      pageId: 1, // For now using 1 until we implement page selection
-    };
-
-    if (itemType === "chores") {
-      newItem.difficulty = difficulty;
-      newItem.assignedUser = assignedUser;
-       // eventually implement user assignment
-       const data = client.addChore(newItem)
-    } else {
-      newItem.price = Number(price);
-      newItem.pricePerPerson = Number(pricePerPerson);
-    }
-
-    alert("New item submitted:\n" + JSON.stringify(newItem, null, 2));
-
-    // Reset form or redirect back to /chores
-    router.push("/chores");
+  // Basic validation
+  if (!title.trim()) {
+    alert("Title is required.");
+    return;
   }
+
+  if (itemType === "bills" && !dueDate) {
+    alert("Due date is required for bills.");
+    return;
+  }
+
+  if (itemType === "bills") {
+    if (!price || isNaN(price) || Number(price) <= 0) {
+      alert("Valid price is required.");
+      return;
+    }
+    if (!pricePerPerson || isNaN(pricePerPerson) || Number(pricePerPerson) <= 0) {
+      alert("Valid price per person is required.");
+      return;
+    }
+  }
+
+  const newItem = {
+    title,
+    dueDate: dueDate || null,
+    description: description.trim() || null,
+    completed: false,
+    pageId: 1, // Placeholder for now
+    type: "chores",
+  };
+
+  if (itemType === "chores") {
+    newItem.difficulty = difficulty;
+    newItem.assignedUser = assignedUser;
+    try {
+      await client.addChore(newItem);
+    } catch (err) {
+      console.error("Failed to add chore:", err);
+      alert("Failed to add chore");
+      return;
+    }
+  } else {
+    newItem.price = Number(price);
+    newItem.pricePerPerson = Number(pricePerPerson);
+    // TODO: Add bill endpoint call when implemented
+    alert("Bill creation not implemented yet.");
+    return;
+  }
+
+  // Redirect and refresh
+  router.push("/chores");
+  router.refresh();
+}
 
   return (
     <>
