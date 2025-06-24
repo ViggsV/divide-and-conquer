@@ -160,14 +160,7 @@ const handleDelete = async (id) => {
               onToggleCompleted={() => console.log("Toggle completed for", item._id)}
             />
           ))}
-          <div>
-          <button
-                  onClick={() => handleDelete(item._id)}
-                  className="text-sm"
-                >
-                  &#128465; Delete
-                </button>
-              </div>
+        
         </div>
         
       )}
