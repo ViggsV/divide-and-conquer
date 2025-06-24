@@ -35,7 +35,6 @@ export default function MainPage() {
         });
         setPages(res.data);
 
-<<<<<<< HEAD
   function handleNewPage() {
     router.push("/newpage");
   }
@@ -49,7 +48,6 @@ const handleDelete = async (id) => {
       alert(message);
     }
   };
-=======
   
         if (!selectedPage && res.data.length > 0) {
           setSelectedPage(res.data[0]._id.toString());
@@ -83,7 +81,6 @@ const handleDelete = async (id) => {
     }
     fetchChores();
   }, [selectedPage]);
->>>>>>> 3218233e2d42df2f643812d65a5b9a2ec8229723
 
   const filteredItems = items.filter(
     (item) =>
