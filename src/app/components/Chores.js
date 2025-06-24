@@ -1,56 +1,118 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import ChorePageSelector from "../components/ChorePageSelector";
 import ViewToggle from "../components/ViewToggle";
 import StatusFilter from "../components/StatusFilter";
 import ItemCard from "../components/ItemCard";
 import AddItemButton from "../components/AddItemButton";
+import axios from "axios";
 
-export default function MainPage({items}) {
-    console.log(items)
-  const [chorePages, setChorePages] = useState([
-    { id: 1, name: "Home" },
-    { id: 2, name: "Work" },
-  ]);
-  const [selectedPage, setSelectedPage] = useState(chorePages[0]?.id || null);
-
-  const [viewMode, setViewMode] = useState("chores"); // chores or bills
-  const [filter, setFilter] = useState("all"); // all, completed, notCompleted
-
+export default function MainPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  // Redirect to /additem for adding items
+  const pageFromQuery = searchParams.get("page");
+
+  const [items, setItems] = useState([]);
+  const [pages, setPages] = useState([]);
+  const [selectedPage, setSelectedPage] = useState(pageFromQuery || "");
+
+  const [viewMode, setViewMode] = useState("chores");
+  const [filter, setFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("recent");
+
+  useEffect(() => {
+    async function fetchPages() {
+      const token = localStorage.getItem("authToken");
+      if (!token) return;
+
+      try {
+        const res = await axios.get("http://localhost:3001/api/pages", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setPages(res.data);
+
+  function handleNewPage() {
+    router.push("/newpage");
+  }
+const handleDelete = async (id) => {
+    const apiClient = new ApiClient();
+    try {
+      await apiClient.removeChore(id);
+      setChores((prevChores) => prevChores.filter((chore) => chore._id !== id));
+    } catch (err) {
+      const message = err.response?.data?.message || "Failed to delete ad.";
+      alert(message);
+    }
+  };
+  
+        if (!selectedPage && res.data.length > 0) {
+          setSelectedPage(res.data[0]._id.toString());
+        }
+      } catch (err) {
+        console.error("Failed to fetch pages:", err);
+      }
+    }
+    fetchPages();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedPage) {
+      setItems([]); 
+      return;
+    }
+
+    async function fetchChores() {
+      const token = localStorage.getItem("authToken");
+      if (!token) return;
+
+      try {
+        const res = await axios.get(`http://localhost:3001/api/chores?pageId=${selectedPage}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setItems(res.data);
+      } catch (err) {
+        console.error("Failed to fetch chores:", err);
+        setItems([]);
+      }
+    }
+    fetchChores();
+  }, [selectedPage]);
+
+  const filteredItems = items.filter(
+    (item) =>
+      item.pageId?.toString() === selectedPage.toString() &&
+      (filter === "all" ||
+        (filter === "completed" && item.completed) ||
+        (filter === "notCompleted" && !item.completed))
+  );
+
+  const sortedItems = [...filteredItems].sort((a, b) => {
+    if (sortBy === "dueDate") {
+      return new Date(a.dueDate || Infinity) - new Date(b.dueDate || Infinity);
+    } else {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    }
+  });
+
   function handleAddItem() {
     router.push("/additem");
   }
 
-  // Navigate to /newpage to create a new page
   function handleNewPage() {
     router.push("/newpage");
   }
 
-  // Filtering items
-  const filteredItems = items.filter(
-    (item) =>
-      item.pageId === selectedPage &&
-      item.type === viewMode
-  );
-
-  console.log(filteredItems)
-
   return (
     <div className="max-w-5xl mx-auto p-4">
       {/* Top Panel */}
-      <div className="border-2 border-rose-800 rounded-md p-4 mb-6 bg-emerald-900 shadow-sm">
+      <div className="border-2 border-rose-800 rounded-md p-4 mb-3 bg-emerald-900 shadow-sm">
         {/* Dropdown + New Page Button */}
         <div className="flex items-center mb-4">
-          <ChorePageSelector
-            chorePages={chorePages}
-            selectedPage={selectedPage}
-            setSelectedPage={setSelectedPage}
-          />
+          <ChorePageSelector selectedPage={selectedPage} setSelectedPage={setSelectedPage} pages={pages} />
           <button
             onClick={handleNewPage}
             className="ml-3 px-4 py-1 bg-rose-700 text-white rounded-md hover:bg-emerald-500 transition"
@@ -64,26 +126,52 @@ export default function MainPage({items}) {
           <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
           <StatusFilter filter={filter} setFilter={setFilter} />
         </div>
+        
       </div>
 
       {/* Add Item Button */}
-      <div className="flex justify-center mb-6">
-        <AddItemButton onClick={handleAddItem} />
+      <div className="relative mb-6">
+        <div className="absolute left-1/2 -translate-x-1/2">
+          <AddItemButton onClick={handleAddItem} />
+        </div>
+        {/* Sort By Dropdown */}
+        <div className="flex justify-end">
+          <div className="border border-gray-500 rounded bg-emerald-900 px-4 py-2 text-white shadow-sm">
+            <label className="mr-2 font-medium">Sort by:</label>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="bg-emerald-800 border border-gray-600 text-white px-2 py-1 rounded"
+            >
+              <option value="recent">Most Recent</option>
+              <option value="dueDate">Due Date</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       {/* Items */}
-      {filteredItems.length === 0 ? (
+      {sortedItems.length === 0 ? (
         <p className="text-center text-emerald-400">No items found.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredItems.map((item) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+          {sortedItems.map((item) => (
             <ItemCard
               key={item._id}
               {...item}
-             
+              onToggleCompleted={() => console.log("Toggle completed for", item._id)}
             />
           ))}
+          <div>
+          <button
+                  onClick={() => handleDelete(item._id)}
+                  className="text-sm"
+                >
+                  &#128465; Delete
+                </button>
+              </div>
         </div>
+        
       )}
     </div>
   );
