@@ -1,42 +1,43 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState, useEffect} from "react"
+import { useState, useEffect } from 'react';
 
 const LogoutButton = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState(null);
   const router = useRouter();
+
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const storedToken = window.localStorage.getItem('authToken');
+      setToken(storedToken);
+    }
+  }, []);
+
+  useEffect(() => {
+    setIsLoggedIn(!!token);
+  }, [token]);
 
   const handleLogout = () => {
     localStorage.setItem('logoutMessage', 'You have logged out');
-    localStorage.removeItem("authToken")
-    window.location.href = "/"
+    localStorage.removeItem('authToken');
+    window.location.href = '/';
   };
-
-  const token = window && window.localStorage.getItem("authToken")
-
-  useEffect(() => {
-    if (token) {
-      setIsLoggedIn(true)
-    } else {
-      setIsLoggedIn(false)
-    }
-  }, [token])
 
   return (
     <button
       onClick={() => {
         if (isLoggedIn) {
-          handleLogout()
-          return; 
+          handleLogout();
+        } else {
+          router.push('/login');
         }
-        router.push("/login")
       }}
       className="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded"
     >
-      {
-        isLoggedIn ? "Logout" : "Login"
-      }
+      {isLoggedIn ? 'Logout' : 'Login'}
     </button>
   );
 };
