@@ -35,20 +35,6 @@ export default function MainPage() {
         });
         setPages(res.data);
 
-  function handleNewPage() {
-    router.push("/newpage");
-  }
-const handleDelete = async (id) => {
-    const apiClient = new ApiClient();
-    try {
-      await apiClient.removeChore(id);
-      setChores((prevChores) => prevChores.filter((chore) => chore._id !== id));
-    } catch (err) {
-      const message = err.response?.data?.message || "Failed to delete ad.";
-      alert(message);
-    }
-  };
-  
         if (!selectedPage && res.data.length > 0) {
           setSelectedPage(res.data[0]._id.toString());
         }
@@ -56,12 +42,13 @@ const handleDelete = async (id) => {
         console.error("Failed to fetch pages:", err);
       }
     }
+
     fetchPages();
   }, []);
 
   useEffect(() => {
     if (!selectedPage) {
-      setItems([]); 
+      setItems([]);
       return;
     }
 
@@ -79,8 +66,33 @@ const handleDelete = async (id) => {
         setItems([]);
       }
     }
+
     fetchChores();
   }, [selectedPage]);
+
+  const toggleCompleted = async (id, currentCompleted) => {
+    const token = localStorage.getItem("authToken");
+    if (!token) return;
+
+    try {
+      const res = await axios.put(
+        `http://localhost:3001/api/chores/${id}`,
+        { completed: !currentCompleted },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setItems((prevItems) =>
+        prevItems.map((item) =>
+          item._id === id ? { ...item, completed: res.data.completed } : item
+        )
+      );
+    } catch (err) {
+      console.error("Failed to toggle completed:", err);
+      alert("Could not update chore status.");
+    }
+  };
 
   const filteredItems = items.filter(
     (item) =>
@@ -112,7 +124,11 @@ const handleDelete = async (id) => {
       <div className="border-2 border-rose-800 rounded-md p-4 mb-3 bg-emerald-900 shadow-sm">
         {/* Dropdown + New Page Button */}
         <div className="flex items-center mb-4">
-          <ChorePageSelector selectedPage={selectedPage} setSelectedPage={setSelectedPage} pages={pages} />
+          <ChorePageSelector
+            selectedPage={selectedPage}
+            setSelectedPage={setSelectedPage}
+            pages={pages}
+          />
           <button
             onClick={handleNewPage}
             className="ml-3 px-4 py-1 bg-rose-700 text-white rounded-md hover:bg-emerald-500 transition"
@@ -126,7 +142,6 @@ const handleDelete = async (id) => {
           <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
           <StatusFilter filter={filter} setFilter={setFilter} />
         </div>
-        
       </div>
 
       {/* Add Item Button */}
@@ -134,6 +149,7 @@ const handleDelete = async (id) => {
         <div className="absolute left-1/2 -translate-x-1/2">
           <AddItemButton onClick={handleAddItem} />
         </div>
+
         {/* Sort By Dropdown */}
         <div className="flex justify-end">
           <div className="border border-gray-500 rounded bg-emerald-900 px-4 py-2 text-white shadow-sm">
@@ -159,19 +175,10 @@ const handleDelete = async (id) => {
             <ItemCard
               key={item._id}
               {...item}
-              onToggleCompleted={() => console.log("Toggle completed for", item._id)}
+              onToggleCompleted={() => toggleCompleted(item._id, item.completed)}
             />
           ))}
-          <div>
-          <button
-                  onClick={() => handleDelete(item._id)}
-                  className="text-sm"
-                >
-                  &#128465; Delete
-                </button>
-              </div>
         </div>
-        
       )}
     </div>
   );
