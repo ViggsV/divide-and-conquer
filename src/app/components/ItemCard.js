@@ -4,7 +4,7 @@ import React from "react";
 import { StarRating } from "./StarRating";
 
 export default function ItemCard({
-  id,
+  _id,
   type,
   title,
   completed,
@@ -14,6 +14,7 @@ export default function ItemCard({
   assignedUser,
   price,
   pricePerPerson,
+  onToggleCompleted
 }) {
   const themeColor = completed ? "emerald" : "rose";
 
@@ -41,7 +42,7 @@ export default function ItemCard({
 
         {/* Completed Status Badge */}
         <button
-          onClick={() => alert("Toggle completed - to be implemented")}
+          onClick={() => onToggleCompleted(_id, !completed)}
           className={`text-sm px-2 py-1 rounded font-medium bg-${themeColor}-500 text-white hover:bg-${themeColor}-600 transition`}
         >
           {completed ? "Completed" : "Not Completed"}
@@ -57,9 +58,6 @@ export default function ItemCard({
       <div className="flex-grow mb-4">
         {description && (
           <div>
-            <p className="text-base text-gray-700 font-semibold mb-1">
-            
-            </p>
             <p className="text-base text-gray-700">{description}</p>
           </div>
         )}
