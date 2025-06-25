@@ -37,6 +37,7 @@ export default function Page() {
     fetchChores();
   }, [selectedPage]);
 
+
   return (
     <div>
       <header className="bg-rose-500 text-white p-6 shadow-md">
@@ -44,7 +45,6 @@ export default function Page() {
           <Link href="/" className="text-3xl font-extrabold">All Your Chores</Link>
         </div>
       </header>
-
       <MainPage items={items} selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
     </div>
   );

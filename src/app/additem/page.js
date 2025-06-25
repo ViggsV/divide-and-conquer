@@ -8,6 +8,8 @@ import { StarRating } from "../components/StarRating";
 import ChorePageSelector from "../components/ChorePageSelector";
 
 
+
+
 export default function AddItemPage() {
   const client = new ApiClient();
   const router = useRouter();

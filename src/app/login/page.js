@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ApiClient } from "../../../api/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -10,6 +10,14 @@ export default function UserLoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      if (window)
+      window.location.href = "/chores"
+    }
+  }, [])
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -28,7 +36,7 @@ export default function UserLoginPage() {
       const response = await apiClient.login(form.email, form.password);
 
       if (response && response.accessToken) {
-        router.push("/chores");
+        window.location.href = "/chores"
       } else {
         setError("Login successful but no token received");
       }
