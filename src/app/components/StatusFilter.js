@@ -6,26 +6,23 @@ export default function StatusFilter({ filter, setFilter }) {
   return (
     <div className="flex gap-2">
       <button
-        onClick={() => setFilter("all")}
-        className={`${baseStyle} ${filter === "all" ? active : inactive}`}
+        onClick={() => setFilter("notCompleted")}
+        className={`${baseStyle} ${filter === "notCompleted" ? active : inactive}`}
       >
-        All
+        ❌
       </button>
       <button
         onClick={() => setFilter("completed")}
         className={`${baseStyle} ${filter === "completed" ? active : inactive}`}
       >
-        ✅ 
+        ✅
       </button>
       <button
-        onClick={() => setFilter("notCompleted")}
-        className={`${baseStyle} ${filter === "notCompleted" ? active : inactive}`}
+        onClick={() => setFilter("all")}
+        className={`${baseStyle} ${filter === "all" ? active : inactive}`}
       >
-        ❌ 
+        All
       </button>
     </div>
   );
 }
-
-
-// Renders the buttons for filtering items by status (All, Completed, Not Completed)

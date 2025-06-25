@@ -2,6 +2,7 @@
 
 import React from "react";
 import { StarRating } from "./StarRating";
+import { TrashIcon } from "@heroicons/react/24/solid";
 
 export default function ItemCard({
   _id,
@@ -11,10 +12,10 @@ export default function ItemCard({
   dueDate,
   description,
   difficulty,
-  assignedUser,
   price,
   pricePerPerson,
-  onToggleCompleted
+  onToggleCompleted,
+  onDelete 
 }) {
   const themeColor = completed ? "emerald" : "rose";
 
@@ -22,28 +23,24 @@ export default function ItemCard({
     <div
       className={`p-6 rounded-lg shadow-md border border-${themeColor}-400 bg-${themeColor}-50 min-h-[240px] flex flex-col`}
     >
-      {/* Status Badges */}
+      
       <div
         className={`flex justify-between items-center mb-4 border-b border-${themeColor}-400 pb-2`}
       >
-        {/* Assigned User Badge */}
-        {assignedUser ? (
-          <span className="text-base font-medium text-gray-700">
-            <strong>User:</strong> {assignedUser}
-          </span>
-        ) : (
-          <button
-            onClick={() => alert("Assign user - to be implemented")}
-            className={`text-sm px-2 py-1 rounded font-medium bg-${themeColor}-500 text-white hover:bg-${themeColor}-600 transition`}
-          >
-            User Unassigned
-          </button>
-        )}
+        {/* Delete Button */}
+        <button
+          onClick={() => onDelete(_id)}
+          className={`text-sm p-2 rounded font-medium bg-rose-500 text-white hover:bg-red-700 transition flex items-center justify-center`}
+          aria-label="Delete"
+          title="Delete"
+        >
+          <TrashIcon className="h-4.5 w-4.5 " />
+        </button>
 
         {/* Completed Status Badge */}
         <button
           onClick={() => onToggleCompleted(_id, !completed)}
-          className={`text-sm px-2 py-1 rounded font-medium bg-${themeColor}-500 text-white hover:bg-${themeColor}-600 transition`}
+          className={`text-sm px-3 py-2 rounded font-medium bg-${themeColor}-500 text-white hover:bg-${themeColor}-600 transition`}
         >
           {completed ? "Completed" : "Not Completed"}
         </button>

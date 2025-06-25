@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { usePathname } from "next/navigation";
 
 export default function ChorePageSelector({ selectedPage, setSelectedPage }) {
   const [pages, setPages] = useState([]);
+  const pathname = usePathname();
 
   useEffect(() => {
     async function fetchPages() {
@@ -22,7 +24,6 @@ export default function ChorePageSelector({ selectedPage, setSelectedPage }) {
 
         setPages(res.data);
 
-      
         if (!selectedPage && res.data.length > 0) {
           setSelectedPage(res.data[0]._id);
         }
@@ -35,11 +36,18 @@ export default function ChorePageSelector({ selectedPage, setSelectedPage }) {
     fetchPages();
   }, [selectedPage, setSelectedPage]);
 
+  const baseClass = "border-2 rounded p-4 w-full";
+  const greenStyle = "bg-emerald-400 border-emerald-400 text-white";
+  const whiteStyle = "bg-white border-gray-300 text-gray-800";
+
+  const className =
+    pathname === "/additem" ? `${baseClass} ${whiteStyle}` : `${baseClass} ${greenStyle}`;
+
   return (
     <select
       value={selectedPage ?? ""}
       onChange={(e) => setSelectedPage(e.target.value)}
-      className="bg-emerald-400 border-2 border-emerald-400 rounded p-4 w-full"
+      className={className}
     >
       {pages.length > 0 ? (
         pages.map((page) => (
