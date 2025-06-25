@@ -29,7 +29,9 @@ export default function UserRegisterPage() {
             const response = await apiClient.register(form.email, form.password, form.name);
 
             if (response && response.accessToken) {
-                router.push("/chores");
+                //router.push("/chores");
+                window.location.href = "/chores"
+                return;
             } else {
                 setError("Registration successful but no token received.");
             }
@@ -41,12 +43,6 @@ export default function UserRegisterPage() {
         } finally {
             setLoading(false);
         }
-        if (name.trim().length < 3) {
-            setError('Name must be at least 3 characters long.');
-            return;
-        }
-
-        console.log('Registering user with name:', name);
 
     };
 
