@@ -113,7 +113,17 @@ export default function MainPage() {
   function handleAddItem() {
     router.push("/additem");
   }
-
+const handleDelete = async (id) => {
+    const apiClient = new ApiClient();
+    try {
+      await apiClient.removeChore(id);
+      setChores((prevChores) => prevChores.filter((chore) => chore._id !== id));
+    } catch (err) {
+      const message = err.response?.data?.message || "Failed to delete chore.";
+      alert(message);
+    }
+  };
+  
   function handleNewPage() {
     router.push("/newpage");
   }
