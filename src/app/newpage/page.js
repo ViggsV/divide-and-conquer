@@ -41,7 +41,7 @@ export default function CreateChorePage() {
 
   try {
     const token = localStorage.getItem("authToken");
-    const res = await axios.post("http://localhost:3001/api/pages", {
+    const res = await axios.post("https://divide-and-conquer-backend-2.onrender.com/api/pages", {
       name: pageName,
       invitedEmails: invitedEmails,
     }, {

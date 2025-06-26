@@ -21,7 +21,7 @@ export default function Page() {
       if (!token) return;
 
       try {
-        const res = await axios.get(`http://localhost:3001/api/chores?pageId=${selectedPage}`, {
+        const res = await axios.get(`https://divide-and-conquer-backend-2.onrender.com/api/chores?pageId=${selectedPage}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -30,7 +30,7 @@ export default function MainPage() {
       if (!token) return;
 
       try {
-        const res = await axios.get("http://localhost:3001/api/pages", {
+        const res = await axios.get("https://divide-and-conquer-backend-2.onrender.com/api/pages", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPages(res.data);
@@ -57,7 +57,7 @@ export default function MainPage() {
       if (!token) return;
 
       try {
-        const res = await axios.get(`http://localhost:3001/api/chores?pageId=${selectedPage}`, {
+        const res = await axios.get(`https://divide-and-conquer-backend-2.onrender.com/api/chores?pageId=${selectedPage}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setItems(res.data);
@@ -76,7 +76,7 @@ export default function MainPage() {
 
     try {
       const res = await axios.put(
-        `http://localhost:3001/api/chores/${id}`,
+        `https://divide-and-conquer-backend-2.onrender.com/api/chores/${id}`,
         { completed: !currentCompleted },
         {
           headers: { Authorization: `Bearer ${token}` },

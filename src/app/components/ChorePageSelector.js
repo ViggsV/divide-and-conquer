@@ -10,7 +10,7 @@ export default function ChorePageSelector({ selectedPage, setSelectedPage }) {
       if (!token) return;
 
       try {
-        const res = await axios.get("http://localhost:3001/api/pages", {
+        const res = await axios.get("https://divide-and-conquer-backend-2.onrender.com/api/pages", {
           headers: { Authorization: `Bearer ${token}` },
         });
 

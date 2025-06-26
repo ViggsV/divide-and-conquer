@@ -3,7 +3,7 @@ import axios from 'axios';
 export class ApiClient {
     constructor() {
         this.axiosInstance = axios.create({
-            baseURL: "http://localhost:3001",
+            baseURL: "https://divide-and-conquer-backend-2.onrender.com",
             withCredentials: true,
 
         })
