@@ -3,11 +3,11 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import ChorePageSelector from "../components/ChorePageSelector";
-import ViewToggle from "../components/ViewToggle";
-import StatusFilter from "../components/StatusFilter";
-import ItemCard from "../components/ItemCard";
-import AddItemButton from "../components/AddItemButton";
+import ChorePageSelector from "@/app/components/ChorePageSelector";
+import ViewToggle from "@/app/components/ViewToggle";
+import StatusFilter from "@/app/components/StatusFilter";
+import ItemCard from "@/app/components/ItemCard";
+import AddItemButton from "@/app/components/AddItemButton";
 import axios from "axios";
 
 export default function MainPage() {
