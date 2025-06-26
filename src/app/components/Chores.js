@@ -21,7 +21,7 @@ export default function MainPage() {
   const [selectedPage, setSelectedPage] = useState(pageFromQuery || "");
 
   const [viewMode, setViewMode] = useState("chores");
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState("notCompleted");
   const [sortBy, setSortBy] = useState("recent");
 
   useEffect(() => {
@@ -94,6 +94,22 @@ export default function MainPage() {
     }
   };
 
+  // Delete handler
+  const handleDelete = async (id) => {
+    const token = localStorage.getItem("authToken");
+    if (!token) return;
+
+    try {
+      await axios.delete(`http://localhost:3001/api/chores/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setItems((prevItems) => prevItems.filter((item) => item._id !== id));
+    } catch (err) {
+      console.error("Delete failed:", err);
+      alert("Failed to delete chore.");
+    }
+  };
+
   const filteredItems = items.filter(
     (item) =>
       item.pageId?.toString() === selectedPage.toString() &&
@@ -113,17 +129,7 @@ export default function MainPage() {
   function handleAddItem() {
     router.push("/additem");
   }
-const handleDelete = async (id) => {
-    const apiClient = new ApiClient();
-    try {
-      await apiClient.removeChore(id);
-      setChores((prevChores) => prevChores.filter((chore) => chore._id !== id));
-    } catch (err) {
-      const message = err.response?.data?.message || "Failed to delete chore.";
-      alert(message);
-    }
-  };
-  
+
   function handleNewPage() {
     router.push("/newpage");
   }
@@ -186,6 +192,7 @@ const handleDelete = async (id) => {
               key={item._id}
               {...item}
               onToggleCompleted={() => toggleCompleted(item._id, item.completed)}
+              onDelete={handleDelete} 
             />
           ))}
         </div>

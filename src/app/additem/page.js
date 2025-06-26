@@ -7,9 +7,6 @@ import Link from "next/link";
 import { StarRating } from "../components/StarRating";
 import ChorePageSelector from "../components/ChorePageSelector";
 
-
-
-
 export default function AddItemPage() {
   const client = new ApiClient();
   const router = useRouter();
@@ -23,7 +20,6 @@ export default function AddItemPage() {
 
   // Chore-specific
   const [difficulty, setDifficulty] = useState(1);
-  const [assignedUser, setAssignedUser] = useState(null);
 
   // Bill-specific
   const [price, setPrice] = useState("");
@@ -66,13 +62,12 @@ export default function AddItemPage() {
       dueDate: dueDate || null,
       description: description.trim() || null,
       completed: false,
-      pageId: selectedPage, 
+      pageId: selectedPage,
       type: "chores",
     };
 
     if (itemType === "chores") {
       newItem.difficulty = difficulty;
-      newItem.assignedUser = assignedUser;
 
       try {
         await client.addChore(newItem);
@@ -185,17 +180,6 @@ export default function AddItemPage() {
                 <label className="block mb-1 font-medium">Difficulty</label>
                 <StarRating rating={difficulty} onChange={setDifficulty} interactive={true} size={50} />
                 <p className="text-sm text-gray-500 mt-1">Click stars to rate difficulty</p>
-              </div>
-
-              <div>
-                <label className="block mb-1 font-medium">Assign User</label>
-                <button
-                  type="button"
-                  onClick={() => alert("Assign user feature coming soon")}
-                  className="px-3 py-1 bg-emerald-100 text-emerald-800 rounded hover:bg-emerald-200"
-                >
-                  {assignedUser || "Not assigned (click to assign)"}
-                </button>
               </div>
             </>
           )}
